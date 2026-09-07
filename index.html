@@ -1,3 +1,255 @@
-<!doctype html><html lang="ko"><meta charset="utf-8">
-<title>준비 중</title>
-<h1>준비 중</h1>
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<script>document.documentElement.classList.add('js')</script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>값부터 봅니다</title>
+<meta name="description" content="집에서 쓰는 물건, 값과 표기 스펙을 한 표에 모읍니다. 직접 써 보진 않았고, 확인한 것만 적습니다.">
+<link rel="canonical" href="https://gapbom.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="값부터 봅니다">
+<meta property="og:description" content="집에서 쓰는 물건, 값과 표기 스펙을 한 표에 모읍니다. 직접 써 보진 않았고, 확인한 것만 적습니다.">
+<meta property="og:url" content="https://gapbom.com/">
+<meta property="og:site_name" content="값부터 봅니다">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+
+<style>:root{
+  --paper:#F4F4F2; --card:#FFFFFF; --ink:#111111; --ink-body:#33332E;
+  --muted:#8E8E88; --line:#EAEAE6;
+  --hero-bg:#0A0B0C; --hero-key:#3D5AF1; --hero-key-2:#8FA8FF;
+  /* --hero-bg를 rgba()에서 다시 쓰기 위한 숫자 3개짜리 판. 히어로는 두
+     테마 모두에서 어둡게 고정돼 있어(명세 §6.1) 다크 모드 블록에서 다시
+     정의하지 않는다. */
+  --hero-bg-rgb:10,11,12;
+  /* 이미지 없는 카드의 자리표시자 그라디언트. --card와 다른 계열이라야
+     "이미지가 없다"는 것이 카드 배경 자체와 구분돼 보인다. */
+  --shot-1:#D9DDD7; --shot-2:#BAC1BC;
+  --radius:12px; --gap:9px; --pad:20px;
+  color-scheme:light dark;
+}
+/* 다크 모드는 시스템 설정만 따른다. 토글은 만들지 않는다. */
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#111110; --card:#1A1A18; --ink:#F2F2EF; --ink-body:#D6D6D0;
+    --muted:#8E8E88; --line:#2A2A27;
+    /* 라이트 모드 값(#D9DDD7 → #BAC1BC)을 그대로 두면 --card(#1A1A18) 위에
+       밝은 회색 슬래브가 얹혀 카드 위쪽 1/3이 튀어 보인다(C1). --line·--card
+       사이 어둡고 미묘한 계열로 바꾼다. */
+    --shot-1:#2C2C28; --shot-2:#3A3A35;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font:400 15px/1.8 Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;
+  text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;
+  /* 한글은 기본값이면 어절 한가운데에서 줄이 바뀐다("망/을"). 어절 단위로 끊는다. */
+  word-break:keep-all}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;height:auto}
+h1,h2,h3{margin:0;font-weight:800;letter-spacing:-.045em;line-height:1.34}
+p{margin:0 0 1.4em;color:var(--ink-body);line-height:1.95;text-wrap:pretty}
+/* 값·수량은 자릿수가 흔들리면 안 된다. 카운트업과 표에서 특히 그렇다. */
+.num,.price,td,th{font-variant-numeric:tabular-nums}
+/* 어절이 한 줄보다 길 수 있는 것은 URL뿐이다. 거기서만 어디서든 끊는다. */
+code,.url{overflow-wrap:anywhere}
+/* 열이 많은 표는 제 상자 안에서 구른다. 본문은 절대 가로로 밀리지 않는다. */
+.scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.wrap{max-width:760px;margin:0 auto;padding:0 var(--pad)}
+header.site{position:sticky;top:0;z-index:9;background:var(--card);
+  border-bottom:1px solid var(--line);padding:13px 0 0}
+header.site .row{display:flex;align-items:center;justify-content:space-between}
+header.site .logo{font-size:15px;font-weight:800;letter-spacing:-.045em}
+header.site nav{display:flex;gap:6px;overflow-x:auto;padding:11px 0 9px;scrollbar-width:none}
+header.site nav::-webkit-scrollbar{display:none}
+header.site nav a{flex:none;font-size:11.5px;font-weight:700;padding:5px 10px;
+  border-radius:99px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+header.site nav a[aria-current]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+footer.site{margin:44px 0 0;padding:22px 0 40px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:12px;line-height:1.9}
+@view-transition{navigation:auto}
+
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes up{from{transform:translateY(108%)}to{transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:none}}
+@keyframes rise-bar{from{transform:scaleY(0)}to{transform:none}}
+
+/* 화면에 들어올 때 한 번만. .seen은 관찰자가 붙인다. 숨기는 선언(opacity:0,
+   translateY/scaleX/scaleY(0))만 html.js 아래에 둔다 — js 클래스가 없으면
+   (스크립트가 아예 안 돌면) 아무것도 숨지 않고 글 목록이 그대로 보인다. */
+html.js .reveal{opacity:0;transform:translateY(16px)}
+.reveal.seen{animation:rise .58s cubic-bezier(.16,1,.3,1) forwards}
+.reveal.seen:nth-child(2){animation-delay:.06s}
+.reveal.seen:nth-child(3){animation-delay:.12s}
+.reveal.seen:nth-child(4){animation-delay:.18s}
+.reveal.seen:nth-child(5){animation-delay:.24s}
+
+/* 제목은 처음부터 있고 마스크만 벗는다. 늦게 등장시키면 LCP가 밀린다.
+   display:block은 항상 필요한 구조 스타일이라 마커 없이 둔다 — 숨기는 건
+   translateY(108%) 하나뿐이다. */
+.line{overflow:hidden}
+.line > b{display:block}
+html.js .line > b{transform:translateY(108%)}
+.line.seen > b{animation:up .82s cubic-bezier(.16,1,.3,1) forwards}
+.line.seen:nth-child(2) > b{animation-delay:.1s}
+.line.seen:nth-child(3) > b{animation-delay:.2s}
+
+html.js .fade-in{opacity:0}
+.fade-in.seen{animation:fade .6s ease-out forwards}
+
+/* 가격 막대. width가 아니라 scaleX로 자라 레이아웃을 건드리지 않는다.
+   scaleX(0)만 마커 아래로 뺀다 — js 없이도 막대 자체는 항상 그려진다.
+   스태거(120ms)는 여기서 :nth-child로 주지 않고 article.ts가 인라인
+   animation-delay로 붙인다. 카드는 .buys 안에서 <h2>와 .asof 사이에 놓여
+   자식 번호가 카드 번호와 어긋나고(예전 규칙은 첫 카드에 .12s를 주고 넷째
+   카드부터는 아무 지연도 주지 못했다), 카드 수는 글마다 다르다. 히어로 막대
+   필드(.field > i)와 같은 방식이다 — 개수가 데이터에 달린 것은 지연도
+   데이터 쪽에서 센다. 축약형 animation:이 delay를 0으로 되돌리지만 인라인
+   선언이 우선하므로 지연은 그대로 남는다. */
+.bar > i{display:block;height:100%;border-radius:99px;background:var(--ink);
+  transform-origin:left}
+html.js .bar > i{transform:scaleX(0)}
+.bar.seen > i{animation:grow .8s cubic-bezier(.16,1,.3,1) forwards}
+
+/* 히어로 막대 필드. 개별 지연은 인라인 style로 붙는다. */
+.field > i{transform-origin:bottom}
+html.js .field > i{transform:scaleY(0)}
+.field.seen > i{animation:rise-bar .95s cubic-bezier(.16,1,.3,1) forwards}
+
+/* 히어로 교체 단어. 상품명이 위로 굴러 다음 이름으로 넘어간다. */
+@keyframes cyc{
+  0%,16%{transform:translateY(0)} 20%,36%{transform:translateY(-100%)}
+  40%,56%{transform:translateY(-200%)} 60%,76%{transform:translateY(-300%)}
+  80%,96%{transform:translateY(-400%)} 100%{transform:translateY(-500%)}}
+.swap u{animation:cyc 9s cubic-bezier(.7,0,.2,1) infinite}
+
+.card-link{transition:transform .42s cubic-bezier(.16,1,.3,1),box-shadow .42s cubic-bezier(.16,1,.3,1)}
+.card-link:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,0,0,.13)}
+.card-link .shot{transition:transform .66s cubic-bezier(.16,1,.3,1)}
+.card-link:hover .shot{transform:scale(1.055)}
+
+/* 애니메이션만 끄면 위의 opacity:0과 translateY(108%)가 그대로 남아
+   글자가 영영 보이지 않는다. 최종 상태를 되돌려 준다. */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important}
+  .reveal,.fade-in,.line > b,.bar > i,.field > i,.swap u{opacity:1 !important;transform:none !important}
+}
+/* 아래 여백 30px은 히어로 자신이 갖는다. 예전에는 .pad(104px)가 전부 떠맡았는데
+   .pad는 stat 블록 안에만 나오므로 상품이 0개인 날 — 사이트의 첫날 상태(명세 §8) —
+   에는 태그라인 밑이 0px가 되어 22px 라운드가 글자 모서리를 잘라 먹었다. */
+.hero{background:var(--hero-bg);color:#fff;border-radius:0 0 22px 22px;
+  padding:46px 0 30px;overflow:hidden;position:relative;margin-bottom:14px}
+.hero .wrap{position:relative;z-index:2}
+.hero .line > b{font-size:31px;font-weight:800;letter-spacing:-.055em;line-height:1.3}
+.hero .swap{display:inline-block;height:1.3em;overflow:hidden;vertical-align:bottom;
+  color:var(--hero-key-2)}
+.hero .swap u{display:block;text-decoration:none}
+.hero .tagline{margin:18px 0 0;color:#9497A0;font-size:12.5px;max-width:30em;line-height:1.8}
+.hero .stat{margin:26px 0 0;position:relative;z-index:2}
+.hero .stat .k{font-size:10px;letter-spacing:.2em;font-weight:800;color:#6E7EBF}
+.hero .stat .n{font-size:52px;font-weight:800;letter-spacing:-.06em;line-height:1;margin:8px 0 4px}
+.hero .stat .u{font-size:11.5px;color:#7C8194}
+/* left:0;right:0에 max-width·margin:auto·padding을 .wrap(layout.ts)과 똑같이
+   주면, 절대 위치로 떠 있는 이 막대 필드도 텍스트가 사는 가운데 열과 같은
+   왼쪽 가장자리에서 시작한다. 값을 여기서 다시 정하지 않고 .wrap과 같은
+   760px·var(--pad)를 그대로 맞춰, 나중에 폭이 바뀌어도 두 곳이 갈리지 않는다. */
+.hero .field{position:absolute;left:0;right:0;bottom:0;height:120px;z-index:1;
+  display:flex;align-items:flex-end;gap:3px;max-width:760px;margin:0 auto;padding:0 var(--pad)}
+/* flex:0 0 6px로 폭을 완전히 고정하면 상품이 적을 때는 화면 왼쪽에 초라하게
+   달라붙은 티끌처럼 보인다(폭 고정 자체는 옳다 — 개수가 많을 때 폭이 나눠져
+   그래프처럼 보이는 걸 막으려던 것). min/max로 숨 쉴 틈을 준다: 막대가 적으면
+   (예: 10개) 하나하나가 max-width까지 자라 번호 아래에 눈에 띄는 덩어리를
+   이루고, 많으면(48개 상한) 촘촘히 채워져 결이 되도록 자연히 줄어든다. */
+.hero .field > i{flex:1 1 6px;min-width:3px;max-width:14px;border-radius:2px 2px 0 0;
+  background:linear-gradient(180deg,var(--hero-key) 0%,#1B2358 100%);opacity:.85}
+/* 히어로는 두 테마 모두에서 어둡게 고정돼 있어(명세 §6.1) 이 블록의 색은
+   토큰의 라이트/다크 전환과 무관하다. rgba(10,11,12,…)만 --hero-bg(#0A0B0C)를
+   숫자로 다시 적은 진짜 중복이라 --hero-bg-rgb로 뽑아 한 곳만 고치면 되게
+   했다. #9497A0(태그라인)·#6E7EBF(stat .k)·#7C8194(stat .u)·#1B2358(막대
+   그라디언트 끝색)은 어디에도 없는 값을 새로 지은 것뿐이라 중복이 아니다 —
+   토큰으로 뽑아도 재사용할 곳이 없어 간접 참조만 하나 늘 뿐이므로 그대로 둔다. */
+.hero .veil{position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,var(--hero-bg) 30%,rgba(var(--hero-bg-rgb),.72) 66%,rgba(var(--hero-bg-rgb),.1) 100%)}
+/* 숫자와 히어로 아래 끝 사이는 예전과 같은 104px로 남는다(74 + 히어로 자체의 30).
+   막대 필드(height:120px)가 절대 위치로 깔려 있어 이 자리를 비워 두지 않으면
+   숫자와 막대가 겹친다. */
+.hero .pad{height:74px}
+@media (max-width:520px){ .hero .line > b{font-size:25px} .hero .stat .n{font-size:42px} }
+/* 좌우 여백은 감싸는 .wrap(layout.ts, 760px)이 준다. 여기서 또 주면 두 배로
+   밀린다 — 측정값은 .wrap 한 곳에만 둔다. */
+.empty{padding:40px 0 60px;color:var(--muted);font-size:13.5px;text-align:center}
+.column > a{display:block;margin-bottom:var(--gap)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+.grid > .big{grid-column:1 / -1}
+.card{background:var(--card);border-radius:var(--radius);overflow:hidden;display:block}
+/* 자리표시자 그라디언트는 토큰(--shot-1/2)에서 가져온다. 값을 여기 직접
+   박으면 다크 모드에서 --card(#1A1A18)·--paper(#111110) 위에 라이트 모드
+   전용 회색 슬래브가 그대로 얹혀 카드 위쪽 1/3이 튀어 보인다. */
+.card .shot{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;
+  background:linear-gradient(160deg,var(--shot-1),var(--shot-2))}
+/* 이미지가 없을 때: 자리표시자를 16/9 그대로 두면 카드마다 큰 빈 블록이 남는다.
+   완전히 없애면 이미지 있는 카드와 없는 카드가 섞였을 때 높이가 들쭉날쭉해
+   그리드가 의도한 배치가 아니라 흐트러진 것처럼 보인다. 그래서 낮은 비율로 줄인다. */
+.card .shot.none{aspect-ratio:21/9}
+.card .bd{padding:12px 13px 15px}
+.card .cat{font-size:10px;font-weight:800;letter-spacing:.06em;color:var(--muted)}
+.card .t{display:block;margin-top:5px;font-size:14px;font-weight:800;
+  letter-spacing:-.035em;line-height:1.45}
+.card .d{display:block;margin-top:5px;color:var(--muted);font-size:12px;line-height:1.65}
+.big .t{font-size:19px;letter-spacing:-.05em}
+.big .shot{aspect-ratio:16/10}
+.big .shot.none{aspect-ratio:21/9}
+@media (max-width:430px){ .grid{grid-template-columns:1fr} }</style>
+<body>
+<header class="site"><div class="wrap">
+<div class="row"><a class="logo" href="/">값부터 봅니다</a></div>
+<nav><a href="/c/cleaning/">청소·세탁</a><a href="/c/kitchen/">주방</a><a href="/c/storage/">수납·정리</a><a href="/c/appliance/">소형가전</a><a href="/c/desk/">디지털·책상</a><a href="/c/bath/">침실·욕실</a></nav>
+</div></header>
+<section class="hero">
+<div class="wrap">
+<div class="line"><b>집에서 쓰는</b></div>
+<div class="line"><b>물건의</b></div>
+<div class="line"><b>값부터 봅니다.</b></div>
+<p class="tagline fade-in">집에서 쓰는 물건, 값과 표기 스펙을 한 표에 모읍니다. 직접 써 보진 않았고, 확인한 것만 적습니다.</p>
+
+</div>
+</section>
+<div class="wrap"><p class="empty">첫 글을 준비하고 있습니다.</p></div>
+<footer class="site"><div class="wrap">
+값부터 봅니다 · 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음<br>
+직접 사서 써 보지 않고 공개된 판매 정보만 확인해 씁니다.
+</div></footer>
+<script>(function(){
+  // .num은 히어로 숫자(data-count)를 들고 있다. 목록에 없으면 count()가 절대
+  // 호출되지 않는 죽은 코드가 된다. .reveal과 달리 .num은 opacity:0으로 숨지
+  // 않으므로 관찰만 하고 트리거만 붙여도 스크립트가 막힌 방문자에게는 여전히
+  // 숫자가 보인다.
+  var targets = document.querySelectorAll('.reveal,.line,.fade-in,.bar,.field,.num');
+  var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // 관찰자가 없거나 움직임을 원치 않으면 즉시 최종 상태로 둔다.
+  if (still || !('IntersectionObserver' in window)) {
+    for (var i = 0; i < targets.length; i++) targets[i].classList.add('seen');
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('seen');
+      io.unobserve(entry.target);
+      var n = entry.target.getAttribute('data-count');
+      if (n) count(entry.target, parseInt(n, 10));
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: .15 });
+  for (var j = 0; j < targets.length; j++) io.observe(targets[j]);
+
+  function count(el, to){
+    var t0 = performance.now(), dur = 1400;
+    (function step(t){
+      var p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 4);
+      el.textContent = Math.round(to * e).toLocaleString('ko-KR');
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+})();</script>
