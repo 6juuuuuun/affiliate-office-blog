@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary_large_image">
 
 <style>:root{
-  --paper:#F4F4F2; --card:#FFFFFF; --ink:#111111; --ink-body:#33332E;
+  --paper:#F4F4F2; --card:#FFFFFF; --ink:#111111; --ink-body:#33332E; --hl:#FFE9A8;
   --muted:#8E8E88; --line:#EAEAE6;
   --hero-bg:#0A0B0C; --hero-key:#3D5AF1; --hero-key-2:#8FA8FF;
   /* --hero-bg를 rgba()에서 다시 쓰기 위한 숫자 3개짜리 판. 히어로는 두
@@ -33,7 +33,7 @@
 /* 다크 모드는 시스템 설정만 따른다. 토글은 만들지 않는다. */
 @media (prefers-color-scheme:dark){
   :root{
-    --paper:#111110; --card:#1A1A18; --ink:#F2F2EF; --ink-body:#D6D6D0;
+    --paper:#111110; --card:#1A1A18; --ink:#F2F2EF; --ink-body:#D6D6D0; --hl:#5C4A16;
     --muted:#8E8E88; --line:#2A2A27;
     /* 라이트 모드 값(#D9DDD7 → #BAC1BC)을 그대로 두면 --card(#1A1A18) 위에
        밝은 회색 슬래브가 얹혀 카드 위쪽 1/3이 튀어 보인다(C1). --line·--card
@@ -58,6 +58,31 @@ p{margin:0 0 1.4em;color:var(--ink-body);line-height:1.95;text-wrap:pretty}
 code,.url{overflow-wrap:anywhere}
 /* 열이 많은 표는 제 상자 안에서 구른다. 본문은 절대 가로로 밀리지 않는다. */
 .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* 데이터에서 그리는 그림. 우리가 계산한 숫자가 들어가는 자리는 생성 모델이 아니라
+   데이터가 그린다 — 표와 그림이 어긋날 수 없어야 하고, 어긋나지 않았음을 검사할 수
+   있어야 한다. 숫자가 없는 그림(대표 이미지 등)은 생성해도 된다. */
+/* 형광펜 자국. 글자색은 본문 그대로 두고 뒤에만 색을 깔아, 훑는 눈이 걸리되
+   읽는 눈은 방해받지 않게 한다. 다크모드에서는 같은 색을 옅게 깐다. */
+mark{background:linear-gradient(transparent 58%,var(--hl) 58%);color:inherit;padding:0 1px}
+.fig{margin:22px 0}
+.sec-fig{margin:22px 0}
+.sec-fig img{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
+.sec-fig figcaption{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.7}
+.fig-svg{width:100%;height:auto;display:block;overflow:visible}
+.fig-bar{fill:var(--line)}
+.fig-bar-low{fill:var(--hero-key)}
+.fig-value{fill:var(--ink);font-size:15px;font-weight:700}
+.fig-name{fill:var(--muted);font-size:13px}
+.fig-none{fill:var(--muted);font-size:15px}
+.fig figcaption{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.7}
+.fig-names{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.fig-names li{display:grid;gap:4px;padding:11px 13px;background:var(--card);
+  border:1px solid var(--line);border-radius:9px}
+.fig-raw{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;
+  color:var(--muted);word-break:keep-all;line-height:1.6}
+.fig-read{font-size:13.5px;color:var(--ink);font-weight:600}
+.fig-read b{color:var(--hero-key);font-weight:800}
 .wrap{max-width:760px;margin:0 auto;padding:0 var(--pad)}
 header.site{position:sticky;top:0;z-index:9;background:var(--card);
   border-bottom:1px solid var(--line);padding:13px 0 0}
@@ -209,32 +234,19 @@ html.js .field > i{transform:scaleY(0)}
 <div class="row"><a class="logo" href="/">값부터 봅니다</a></div>
 <nav><a href="/c/cleaning/">청소·세탁</a><a href="/c/kitchen/">주방</a><a href="/c/storage/">수납·정리</a><a href="/c/appliance/">소형가전</a><a href="/c/desk/">디지털·책상</a><a href="/c/bath/">침실·욕실</a></nav>
 </div></header>
-<section class="hero"><div class="field"><i style="height:34%;animation-delay:0ms"></i><i style="height:71%;animation-delay:14ms"></i><i style="height:45%;animation-delay:28ms"></i></div>
-<div class="veil"></div>
+<section class="hero">
 <div class="wrap">
 <div class="line"><b>집에서 쓰는</b></div>
-<div class="line"><b><span class="swap"><u>청소·세탁의</u><u>청소·세탁의</u><u>청소·세탁의</u><u>청소·세탁의</u><u>청소·세탁의</u><u>청소·세탁의</u></span></b></div>
+<div class="line"><b>물건의</b></div>
 <div class="line"><b>값부터 봅니다.</b></div>
 <p class="tagline fade-in">집에서 쓰는 물건, 값과 표기 스펙을 한 표에 모읍니다. 직접 써 보진 않았고, 확인한 것만 적습니다.</p>
-<div class="stat">
-<div class="k">지금까지 확인한 표시가</div>
-<div class="n num" data-count="3">3</div>
-<div class="u">개 상품 · 표시가만, 계산은 저희가</div>
-</div>
-<div class="pad"></div>
+
 </div>
 </section>
-<div class="wrap"><div class="column"><a class="card card-link reveal big" href="/posts/washer-cleaner-unit-price/">
-<span class="shot none" aria-hidden="true"></span>
-<span class="bd">
-<span class="cat">청소·세탁</span>
-<span class="t">세탁조 클리너 퓨라온·살림백서·마더케이, 1kg당 단가 비교</span>
-<span class="d">세 상품의 용량과 수량을 총질량으로 환산해, 묶음 가격이 싼 제품과 1kg당 값이 싼 제품을 가르고 구매 기준을 정리했습니다.</span>
-</span>
-</a></div></div>
+<div class="wrap"><p class="empty">첫 글을 준비하고 있습니다.</p></div>
 <footer class="site"><div class="wrap">
 값부터 봅니다 · 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음<br>
-공개된 판매 정보를 확인해 값과 구성을 정리합니다.
+공개된 판매 정보로 값과 구성을 정리했습니다.
 </div></footer>
 <script>(function(){
   // .num은 히어로 숫자(data-count)를 들고 있다. 목록에 없으면 count()가 절대
