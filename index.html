@@ -17,29 +17,42 @@
 <meta name="twitter:card" content="summary_large_image">
 
 <style>:root{
-  --paper:#F4F4F2; --card:#FFFFFF; --ink:#111111; --ink-body:#33332E; --hl:#FFE9A8;
-  --muted:#8E8E88; --line:#EAEAE6;
-  --hero-bg:#0A0B0C; --hero-key:#3D5AF1; --hero-key-2:#8FA8FF;
-  /* --hero-bg를 rgba()에서 다시 쓰기 위한 숫자 3개짜리 판. 히어로는 두
-     테마 모두에서 어둡게 고정돼 있어(명세 §6.1) 다크 모드 블록에서 다시
-     정의하지 않는다. */
-  --hero-bg-rgb:10,11,12;
-  /* 이미지 없는 카드의 자리표시자 그라디언트. --card와 다른 계열이라야
-     "이미지가 없다"는 것이 카드 배경 자체와 구분돼 보인다. */
-  --shot-1:#D9DDD7; --shot-2:#BAC1BC;
-  --radius:12px; --gap:9px; --pad:20px;
-  color-scheme:light dark;
+  /*
+   * 가전과 살림살이를 소개하는 곳이다. 물건 사진이 주인공이고 글은 그 옆에서
+   * 조용해야 하므로, 배경은 색을 갖지 않는 종이여야 한다. 순백(#FFF)은 화면에서
+   * 눈이 부시고 카드와 배경이 붙어 버리므로 아주 옅은 회색을 종이로 쓰고 카드만
+   * 흰색으로 띄운다.
+   */
+  --paper:#FBFBFD; --card:#FFFFFF; --ink:#1D1D1F; --ink-body:#3A3A3C; --hl:#FFE9A8;
+  --muted:#86868B; --line:#E7E7EC;
+  /* 강조는 한 가지 파랑으로 족하다. 값·막대·링크가 모두 이것을 쓴다. */
+  --key:#0071E3; --key-soft:#7FB4F5;
+  /* 히어로도 종이와 같은 계열이다. 검은 판을 얹으면 글 목록과 다른 사이트처럼 보인다. */
+  --hero-bg:#F5F5F7; --hero-key:var(--key); --hero-key-2:#0071E3;
+  --hero-bg-rgb:245,245,247;
+  /* 이미지 없는 카드의 자리표시자. --card와 구분되되 튀지 않는 계열이다. */
+  --shot-1:#F0F0F3; --shot-2:#E3E3E8;
+  /* 자간은 크기마다 다르다. 큰 글자는 좁혀야 하고 본문은 건드리지 않는다. */
+  --track-display:-.03em; --track-title:-.02em; --track-body:0;
+  --radius:14px; --gap:10px; --pad:20px;
+  color-scheme:light;
 }
-/* 다크 모드는 시스템 설정만 따른다. 토글은 만들지 않는다. */
-@media (prefers-color-scheme:dark){
-  :root{
-    --paper:#111110; --card:#1A1A18; --ink:#F2F2EF; --ink-body:#D6D6D0; --hl:#5C4A16;
-    --muted:#8E8E88; --line:#2A2A27;
-    /* 라이트 모드 값(#D9DDD7 → #BAC1BC)을 그대로 두면 --card(#1A1A18) 위에
-       밝은 회색 슬래브가 얹혀 카드 위쪽 1/3이 튀어 보인다(C1). --line·--card
-       사이 어둡고 미묘한 계열로 바꾼다. */
-    --shot-1:#2C2C28; --shot-2:#3A3A35;
-  }
+/*
+ * 다크 모드를 따르지 않는다.
+ *
+ * 여기는 집에 들이는 물건을 소개하는 곳이고 화면의 주인공은 상품 사진이다. 흰
+ * 종이 위에서 색이 제일 정확하게 보이고, 값과 표도 흰 바탕에서 가장 잘 읽힌다.
+ * 대표가 정한 방향이다.
+ *
+ * 그래서 color-scheme도 light로 못 박는다 — 이것을 빼면 시스템이 어두울 때
+ * 브라우저가 스크롤바와 폼 컨트롤을 어둡게 그려 흰 페이지 위에 검은 조각이 남는다.
+ *
+ * 다시 다크 모드를 쓰려면 여기에 @media (prefers-color-scheme:dark) 블록을 두고
+ * 아래 토큰을 어두운 값으로 다시 정의하면 된다.
+ */
+/* 대비를 높여 달라고 한 사람에게는 경계선을 또렷하게 준다. */
+@media (prefers-contrast:more){
+  :root{ --line:#B8B8BF; --muted:#5F5F66; }
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -50,8 +63,16 @@ body{margin:0;background:var(--paper);color:var(--ink);
   word-break:keep-all}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;height:auto}
-h1,h2,h3{margin:0;font-weight:800;letter-spacing:-.045em;line-height:1.34}
-p{margin:0 0 1.4em;color:var(--ink-body);line-height:1.95;text-wrap:pretty}
+/* 자간은 크기를 따라간다. 하나로 고정하면 어느 크기에서는 반드시 틀린다. */
+h1,h2,h3{margin:0;font-weight:700;line-height:1.34}
+h1{letter-spacing:var(--track-display)}
+h2,h3{letter-spacing:var(--track-title)}
+p{margin:0 0 1.4em;color:var(--ink-body);letter-spacing:var(--track-body);
+  line-height:1.95;text-wrap:pretty}
+/* 누르는 것은 눌리는 순간 반응한다. 손을 뗀 뒤가 아니다. */
+a:active{transform:scale(.985)}
+a{transition:transform .1s ease-out}
+@media (prefers-reduced-motion:reduce){ a,a:active{transition:none;transform:none} }
 /* 값·수량은 자릿수가 흔들리면 안 된다. 카운트업과 표에서 특히 그렇다. */
 .num,.price,td,th{font-variant-numeric:tabular-nums}
 /* 어절이 한 줄보다 길 수 있는 것은 URL뿐이다. 거기서만 어디서든 끊는다. */
@@ -71,7 +92,7 @@ mark{background:linear-gradient(transparent 58%,var(--hl) 58%);color:inherit;pad
 .sec-fig figcaption{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.7}
 .fig-svg{width:100%;height:auto;display:block;overflow:visible}
 .fig-bar{fill:var(--line)}
-.fig-bar-low{fill:var(--hero-key)}
+.fig-bar-low{fill:var(--key)}
 .fig-value{fill:var(--ink);font-size:15px;font-weight:700}
 .fig-name{fill:var(--muted);font-size:13px}
 .fig-none{fill:var(--muted);font-size:15px}
@@ -82,17 +103,29 @@ mark{background:linear-gradient(transparent 58%,var(--hl) 58%);color:inherit;pad
 .fig-raw{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;
   color:var(--muted);word-break:keep-all;line-height:1.6}
 .fig-read{font-size:13.5px;color:var(--ink);font-weight:600}
-.fig-read b{color:var(--hero-key);font-weight:800}
+.fig-read b{color:var(--key);font-weight:700}
 .wrap{max-width:760px;margin:0 auto;padding:0 var(--pad)}
-header.site{position:sticky;top:0;z-index:9;background:var(--card);
-  border-bottom:1px solid var(--line);padding:13px 0 0}
+/*
+ * 머리말은 내용 위에 떠 있는 재질이다. 불투명한 띠로 만들면 화면 위쪽 한 줄을
+ * 통째로 잡아먹지만, 반투명한 유리로 두면 글이 그 아래로 흘러가는 것이 보인다.
+ * 투명도를 줄여 달라고 한 사람에게는 불투명한 판으로 돌려준다.
+ */
+header.site{position:sticky;top:0;z-index:9;padding:13px 0 0;
+  background:color-mix(in srgb,var(--card) 78%,transparent);
+  backdrop-filter:blur(20px) saturate(150%);
+  border-bottom:1px solid var(--line)}
+@media (prefers-reduced-transparency:reduce){
+  header.site{background:var(--card);backdrop-filter:none}
+}
 header.site .row{display:flex;align-items:center;justify-content:space-between}
-header.site .logo{font-size:15px;font-weight:800;letter-spacing:-.045em}
+header.site .logo{font-size:15px;font-weight:700;letter-spacing:var(--track-title)}
 header.site nav{display:flex;gap:6px;overflow-x:auto;padding:11px 0 9px;scrollbar-width:none}
 header.site nav::-webkit-scrollbar{display:none}
-header.site nav a{flex:none;font-size:11.5px;font-weight:700;padding:5px 10px;
-  border-radius:99px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
-header.site nav a[aria-current]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+header.site nav a{flex:none;font-size:11.5px;font-weight:600;padding:5px 11px;
+  border-radius:99px;border:1px solid var(--line);color:var(--muted);white-space:nowrap;
+  background:var(--card);transition:background .15s ease-out,color .15s ease-out,transform .1s ease-out}
+header.site nav a:hover{color:var(--ink);border-color:var(--muted)}
+header.site nav a[aria-current]{background:var(--ink);border-color:var(--ink);color:var(--card)}
 footer.site{margin:44px 0 0;padding:22px 0 40px;border-top:1px solid var(--line);
   color:var(--muted);font-size:12px;line-height:1.9}
 @view-transition{navigation:auto}
@@ -166,18 +199,22 @@ html.js .field > i{transform:scaleY(0)}
 /* 아래 여백 30px은 히어로 자신이 갖는다. 예전에는 .pad(104px)가 전부 떠맡았는데
    .pad는 stat 블록 안에만 나오므로 상품이 0개인 날 — 사이트의 첫날 상태(명세 §8) —
    에는 태그라인 밑이 0px가 되어 22px 라운드가 글자 모서리를 잘라 먹었다. */
-.hero{background:var(--hero-bg);color:#fff;border-radius:0 0 22px 22px;
-  padding:46px 0 30px;overflow:hidden;position:relative;margin-bottom:14px}
+.hero{background:linear-gradient(180deg,var(--card) 0%,var(--hero-bg) 100%);
+  color:var(--ink);border-radius:0 0 22px 22px;
+  padding:46px 0 30px;overflow:hidden;position:relative;margin-bottom:14px;
+  border-bottom:1px solid var(--line)}
 .hero .wrap{position:relative;z-index:2}
-.hero .line > b{font-size:31px;font-weight:800;letter-spacing:-.055em;line-height:1.3}
+.hero .line > b{font-size:31px;font-weight:700;letter-spacing:var(--track-display);line-height:1.3}
 .hero .swap{display:inline-block;height:1.3em;overflow:hidden;vertical-align:bottom;
-  color:var(--hero-key-2)}
+  color:var(--key)}
 .hero .swap u{display:block;text-decoration:none}
-.hero .tagline{margin:18px 0 0;color:#9497A0;font-size:12.5px;max-width:30em;line-height:1.8}
+.hero .tagline{margin:18px 0 0;color:var(--muted);font-size:12.5px;max-width:30em;line-height:1.8}
 .hero .stat{margin:26px 0 0;position:relative;z-index:2}
-.hero .stat .k{font-size:10px;letter-spacing:.2em;font-weight:800;color:#6E7EBF}
-.hero .stat .n{font-size:52px;font-weight:800;letter-spacing:-.06em;line-height:1;margin:8px 0 4px}
-.hero .stat .u{font-size:11.5px;color:#7C8194}
+.hero .stat .k{font-size:10px;letter-spacing:.2em;font-weight:700;color:var(--key)}
+/* 큰 숫자는 좁혀야 읽힌다. 자간을 크기별 토큰에서 가져와 한 곳에서 정한다. */
+.hero .stat .n{font-size:52px;font-weight:700;letter-spacing:-.045em;line-height:1;
+  margin:8px 0 4px;color:var(--ink)}
+.hero .stat .u{font-size:11.5px;color:var(--muted)}
 /* left:0;right:0에 max-width·margin:auto·padding을 .wrap(layout.ts)과 똑같이
    주면, 절대 위치로 떠 있는 이 막대 필드도 텍스트가 사는 가운데 열과 같은
    왼쪽 가장자리에서 시작한다. 값을 여기서 다시 정하지 않고 .wrap과 같은
@@ -186,19 +223,13 @@ html.js .field > i{transform:scaleY(0)}
   display:flex;align-items:flex-end;gap:3px;max-width:760px;margin:0 auto;padding:0 var(--pad)}
 /* flex:0 0 6px로 폭을 완전히 고정하면 상품이 적을 때는 화면 왼쪽에 초라하게
    달라붙은 티끌처럼 보인다(폭 고정 자체는 옳다 — 개수가 많을 때 폭이 나눠져
-   그래프처럼 보이는 걸 막으려던 것). min/max로 숨 쉴 틈을 준다: 막대가 적으면
-   (예: 10개) 하나하나가 max-width까지 자라 번호 아래에 눈에 띄는 덩어리를
-   이루고, 많으면(48개 상한) 촘촘히 채워져 결이 되도록 자연히 줄어든다. */
-.hero .field > i{flex:1 1 6px;min-width:3px;max-width:14px;border-radius:2px 2px 0 0;
-  background:linear-gradient(180deg,var(--hero-key) 0%,#1B2358 100%);opacity:.85}
-/* 히어로는 두 테마 모두에서 어둡게 고정돼 있어(명세 §6.1) 이 블록의 색은
-   토큰의 라이트/다크 전환과 무관하다. rgba(10,11,12,…)만 --hero-bg(#0A0B0C)를
-   숫자로 다시 적은 진짜 중복이라 --hero-bg-rgb로 뽑아 한 곳만 고치면 되게
-   했다. #9497A0(태그라인)·#6E7EBF(stat .k)·#7C8194(stat .u)·#1B2358(막대
-   그라디언트 끝색)은 어디에도 없는 값을 새로 지은 것뿐이라 중복이 아니다 —
-   토큰으로 뽑아도 재사용할 곳이 없어 간접 참조만 하나 늘 뿐이므로 그대로 둔다. */
+   그래프처럼 보이는 걸 막으려던 것). min/max로 숨 쉴 틈을 준다. */
+.hero .field > i{flex:1 1 6px;min-width:3px;max-width:14px;border-radius:3px 3px 0 0;
+  background:linear-gradient(180deg,var(--key-soft) 0%,rgba(0,113,227,.12) 100%);opacity:.9}
+/* 흰 종이 위에서는 막대를 덮어 가리는 것이 아니라 아래로 스며들게 한다.
+   위쪽은 종이색으로 시작해 아래로 갈수록 투명해져, 막대가 종이에서 자라난 것처럼 보인다. */
 .hero .veil{position:absolute;inset:0;z-index:1;
-  background:linear-gradient(180deg,var(--hero-bg) 30%,rgba(var(--hero-bg-rgb),.72) 66%,rgba(var(--hero-bg-rgb),.1) 100%)}
+  background:linear-gradient(180deg,var(--card) 30%,rgba(var(--hero-bg-rgb),.72) 66%,rgba(var(--hero-bg-rgb),0) 100%)}
 /* 숫자와 히어로 아래 끝 사이는 예전과 같은 104px로 남는다(74 + 히어로 자체의 30).
    막대 필드(height:120px)가 절대 위치로 깔려 있어 이 자리를 비워 두지 않으면
    숫자와 막대가 겹친다. */
@@ -221,18 +252,21 @@ html.js .field > i{transform:scaleY(0)}
    그리드가 의도한 배치가 아니라 흐트러진 것처럼 보인다. 그래서 낮은 비율로 줄인다. */
 .card .shot.none{aspect-ratio:21/9}
 .card .bd{padding:12px 13px 15px}
-.card .cat{font-size:10px;font-weight:800;letter-spacing:.06em;color:var(--muted)}
-.card .t{display:block;margin-top:5px;font-size:14px;font-weight:800;
-  letter-spacing:-.035em;line-height:1.45}
+/* 카드는 종이 위에 얹힌 흰 판이다. 경계선과 아주 옅은 그림자로 그 층을 만든다. */
+.card{border:1px solid var(--line);box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.card:active{transform:scale(.99)}
+.card .cat{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--muted)}
+.card .t{display:block;margin-top:5px;font-size:14px;font-weight:700;
+  letter-spacing:var(--track-title);line-height:1.45}
 .card .d{display:block;margin-top:5px;color:var(--muted);font-size:12px;line-height:1.65}
-.big .t{font-size:19px;letter-spacing:-.05em}
+.big .t{font-size:19px;letter-spacing:var(--track-display)}
 .big .shot{aspect-ratio:16/10}
 .big .shot.none{aspect-ratio:21/9}
 @media (max-width:430px){ .grid{grid-template-columns:1fr} }</style>
 <body>
 <header class="site"><div class="wrap">
 <div class="row"><a class="logo" href="/">값부터 봅니다</a></div>
-<nav><a href="/c/cleaning/">청소·세탁</a><a href="/c/kitchen/">주방</a><a href="/c/storage/">수납·정리</a><a href="/c/appliance/">소형가전</a><a href="/c/desk/">디지털·책상</a><a href="/c/bath/">침실·욕실</a></nav>
+<nav></nav>
 </div></header>
 <section class="hero">
 <div class="wrap">
