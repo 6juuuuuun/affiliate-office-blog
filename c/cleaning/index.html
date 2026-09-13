@@ -4,13 +4,13 @@
 <script>document.documentElement.classList.add('js')</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>청소·세탁 · 값부터 봅니다</title>
-<meta name="description" content="청소·세탁 분류의 글. 집에서 쓰는 물건, 값과 표기 스펙을 한 표에 모읍니다. 직접 써 보진 않았고, 확인한 것만 적습니다.">
+<meta name="description" content="청소·세탁 분류의 글. 판매 페이지에 적힌 값과 제조사 표기 스펙을 한 표에 모읍니다. 직접 써 보진 않았고, 확인한 것만 적습니다.">
 <link rel="canonical" href="https://gapbom.com/c/cleaning/">
 <meta name="robots" content="noindex, nofollow">
 
 <meta property="og:type" content="article">
 <meta property="og:title" content="청소·세탁 · 값부터 봅니다">
-<meta property="og:description" content="청소·세탁 분류의 글. 집에서 쓰는 물건, 값과 표기 스펙을 한 표에 모읍니다. 직접 써 보진 않았고, 확인한 것만 적습니다.">
+<meta property="og:description" content="청소·세탁 분류의 글. 판매 페이지에 적힌 값과 제조사 표기 스펙을 한 표에 모읍니다. 직접 써 보진 않았고, 확인한 것만 적습니다.">
 <meta property="og:url" content="https://gapbom.com/c/cleaning/">
 <meta property="og:site_name" content="값부터 봅니다">
 <meta property="og:locale" content="ko_KR">
@@ -26,12 +26,9 @@
   --paper:#FBFBFD; --card:#FFFFFF; --ink:#1D1D1F; --ink-body:#3A3A3C; --hl:#FFE9A8;
   --muted:#86868B; --line:#E7E7EC;
   /* 강조는 한 가지 파랑으로 족하다. 값·막대·링크가 모두 이것을 쓴다. */
-  --key:#0071E3; --key-soft:#7FB4F5;
-  /* 히어로도 종이와 같은 계열이다. 검은 판을 얹으면 글 목록과 다른 사이트처럼 보인다. */
-  --hero-bg:#F5F5F7; --hero-key:var(--key); --hero-key-2:#0071E3;
-  --hero-bg-rgb:245,245,247;
-  /* 이미지 없는 카드의 자리표시자. --card와 구분되되 튀지 않는 계열이다. */
-  --shot-1:#F0F0F3; --shot-2:#E3E3E8;
+  --key:#0071E3;
+  /* 종이보다 한 단 낮은 면. 카드 안의 값 판과 알림 상자가 이것을 딛고 선다. */
+  --wash:#F5F5F7;
   /* 자간은 크기마다 다르다. 큰 글자는 좁혀야 하고 본문은 건드리지 않는다. */
   --track-display:-.03em; --track-title:-.02em; --track-body:0;
   --radius:14px; --gap:10px; --pad:20px;
@@ -106,6 +103,12 @@ mark{background:linear-gradient(transparent 58%,var(--hl) 58%);color:inherit;pad
 .fig-read b{color:var(--key);font-weight:700}
 .wrap{max-width:760px;margin:0 auto;padding:0 var(--pad)}
 /*
+ * 글은 읽는 폭(760px)에 맞추지만 목록은 그렇지 않다. 값 판과 글 덩어리가
+ * 나란히 서려면 자리가 더 있어야 하고, 1568px 화면에서 760px 한 줄만 쓰면
+ * 좌우가 텅 빈다. 넓은 쪽을 쓰는 페이지가 스스로 이 클래스를 붙인다.
+ */
+.wrap.wide{max-width:1100px}
+/*
  * 머리말은 내용 위에 떠 있는 재질이다. 불투명한 띠로 만들면 화면 위쪽 한 줄을
  * 통째로 잡아먹지만, 반투명한 유리로 두면 글이 그 아래로 흘러가는 것이 보인다.
  * 투명도를 줄여 달라고 한 사람에게는 불투명한 판으로 돌려준다.
@@ -126,6 +129,18 @@ header.site nav a{flex:none;font-size:11.5px;font-weight:600;padding:5px 11px;
   background:var(--card);transition:background .15s ease-out,color .15s ease-out,transform .1s ease-out}
 header.site nav a:hover{color:var(--ink);border-color:var(--muted)}
 header.site nav a[aria-current]{background:var(--ink);border-color:var(--ink);color:var(--card)}
+/*
+ * 좁은 화면에서는 이름 한 줄, 분류 한 줄이다. 분류가 가로로 넘치면 그 줄만
+ * 밀어서 본다. 넓어지면 두 줄을 한 줄로 합친다 — 자리가 있는데도 머리말이
+ * 95px를 차지하면 첫 화면에서 글이 그만큼 밀린다.
+ */
+@media (min-width:721px){
+  header.site{padding:0}
+  header.site > .wrap{display:flex;align-items:center;justify-content:space-between;
+    gap:28px;min-height:58px}
+  header.site .row{flex:none}
+  header.site nav{padding:0;overflow:visible}
+}
 footer.site{margin:44px 0 0;padding:22px 0 40px;border-top:1px solid var(--line);
   color:var(--muted);font-size:12px;line-height:1.9}
 @view-transition{navigation:auto}
@@ -134,10 +149,9 @@ footer.site{margin:44px 0 0;padding:22px 0 40px;border-top:1px solid var(--line)
 @keyframes up{from{transform:translateY(108%)}to{transform:none}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes grow{from{transform:scaleX(0)}to{transform:none}}
-@keyframes rise-bar{from{transform:scaleY(0)}to{transform:none}}
 
 /* 화면에 들어올 때 한 번만. .seen은 관찰자가 붙인다. 숨기는 선언(opacity:0,
-   translateY/scaleX/scaleY(0))만 html.js 아래에 둔다 — js 클래스가 없으면
+   translateY/scaleX(0))만 html.js 아래에 둔다 — js 클래스가 없으면
    (스크립트가 아예 안 돌면) 아무것도 숨지 않고 글 목록이 그대로 보인다. */
 html.js .reveal{opacity:0;transform:translateY(16px)}
 .reveal.seen{animation:rise .58s cubic-bezier(.16,1,.3,1) forwards}
@@ -148,8 +162,13 @@ html.js .reveal{opacity:0;transform:translateY(16px)}
 
 /* 제목은 처음부터 있고 마스크만 벗는다. 늦게 등장시키면 LCP가 밀린다.
    display:block은 항상 필요한 구조 스타일이라 마커 없이 둔다 — 숨기는 건
-   translateY(108%) 하나뿐이다. */
-.line{overflow:hidden}
+   translateY(108%) 하나뿐이다.
+
+   .line 자신도 블록이어야 한다. <h1> 안에 들어갈 수 있는 것은 구(phrasing)
+   내용뿐이라 이 마스크는 <span>으로 쓰는데, 인라인 상자에서는 overflow:hidden이
+   아무 일도 하지 않는다 — 마스크가 풀려 제목이 제자리에 멈추지 못하고 아래
+   문단 위로 겹쳐 앉는다. 실제로 그렇게 나갔다. */
+.line{display:block;overflow:hidden}
 .line > b{display:block}
 html.js .line > b{transform:translateY(108%)}
 .line.seen > b{animation:up .82s cubic-bezier(.16,1,.3,1) forwards}
@@ -164,26 +183,14 @@ html.js .fade-in{opacity:0}
    스태거(120ms)는 여기서 :nth-child로 주지 않고 article.ts가 인라인
    animation-delay로 붙인다. 카드는 .buys 안에서 <h2>와 .asof 사이에 놓여
    자식 번호가 카드 번호와 어긋나고(예전 규칙은 첫 카드에 .12s를 주고 넷째
-   카드부터는 아무 지연도 주지 못했다), 카드 수는 글마다 다르다. 히어로 막대
-   필드(.field > i)와 같은 방식이다 — 개수가 데이터에 달린 것은 지연도
-   데이터 쪽에서 센다. 축약형 animation:이 delay를 0으로 되돌리지만 인라인
-   선언이 우선하므로 지연은 그대로 남는다. */
+   카드부터는 아무 지연도 주지 못했다), 카드 수는 글마다 다르다. 홈 카드의 값
+   판(home.ts)도 같은 방식이다 — 개수가 데이터에 달린 것은 지연도 데이터 쪽에서
+   센다. 축약형 animation:이 delay를 0으로 되돌리지만 인라인 선언이 우선하므로
+   지연은 그대로 남는다. */
 .bar > i{display:block;height:100%;border-radius:99px;background:var(--ink);
   transform-origin:left}
 html.js .bar > i{transform:scaleX(0)}
 .bar.seen > i{animation:grow .8s cubic-bezier(.16,1,.3,1) forwards}
-
-/* 히어로 막대 필드. 개별 지연은 인라인 style로 붙는다. */
-.field > i{transform-origin:bottom}
-html.js .field > i{transform:scaleY(0)}
-.field.seen > i{animation:rise-bar .95s cubic-bezier(.16,1,.3,1) forwards}
-
-/* 히어로 교체 단어. 상품명이 위로 굴러 다음 이름으로 넘어간다. */
-@keyframes cyc{
-  0%,16%{transform:translateY(0)} 20%,36%{transform:translateY(-100%)}
-  40%,56%{transform:translateY(-200%)} 60%,76%{transform:translateY(-300%)}
-  80%,96%{transform:translateY(-400%)} 100%{transform:translateY(-500%)}}
-.swap u{animation:cyc 9s cubic-bezier(.7,0,.2,1) infinite}
 
 .card-link{transition:transform .42s cubic-bezier(.16,1,.3,1),box-shadow .42s cubic-bezier(.16,1,.3,1)}
 .card-link:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,0,0,.13)}
@@ -194,102 +201,162 @@ html.js .field > i{transform:scaleY(0)}
    글자가 영영 보이지 않는다. 최종 상태를 되돌려 준다. */
 @media (prefers-reduced-motion:reduce){
   *{animation:none !important;transition:none !important}
-  .reveal,.fade-in,.line > b,.bar > i,.field > i,.swap u{opacity:1 !important;transform:none !important}
+  .reveal,.fade-in,.line > b,.bar > i{opacity:1 !important;transform:none !important}
 }
-/* 아래 여백 30px은 히어로 자신이 갖는다. 예전에는 .pad(104px)가 전부 떠맡았는데
-   .pad는 stat 블록 안에만 나오므로 상품이 0개인 날 — 사이트의 첫날 상태(명세 §8) —
-   에는 태그라인 밑이 0px가 되어 22px 라운드가 글자 모서리를 잘라 먹었다. */
-.hero{background:linear-gradient(180deg,var(--card) 0%,var(--hero-bg) 100%);
-  color:var(--ink);border-radius:0 0 22px 22px;
-  padding:46px 0 30px;overflow:hidden;position:relative;margin-bottom:14px;
-  border-bottom:1px solid var(--line)}
-.hero .wrap{position:relative;z-index:2}
-.hero .line > b{font-size:31px;font-weight:700;letter-spacing:var(--track-display);line-height:1.3}
-.hero .swap{display:inline-block;height:1.3em;overflow:hidden;vertical-align:bottom;
-  color:var(--key)}
-.hero .swap u{display:block;text-decoration:none}
-.hero .tagline{margin:18px 0 0;color:var(--muted);font-size:12.5px;max-width:30em;line-height:1.8}
-.hero .stat{margin:26px 0 0;position:relative;z-index:2}
-.hero .stat .k{font-size:10px;letter-spacing:.2em;font-weight:700;color:var(--key)}
-/* 큰 숫자는 좁혀야 읽힌다. 자간을 크기별 토큰에서 가져와 한 곳에서 정한다. */
-.hero .stat .n{font-size:52px;font-weight:700;letter-spacing:-.045em;line-height:1;
-  margin:8px 0 4px;color:var(--ink)}
-.hero .stat .u{font-size:11.5px;color:var(--muted)}
-/* left:0;right:0에 max-width·margin:auto·padding을 .wrap(layout.ts)과 똑같이
-   주면, 절대 위치로 떠 있는 이 막대 필드도 텍스트가 사는 가운데 열과 같은
-   왼쪽 가장자리에서 시작한다. 값을 여기서 다시 정하지 않고 .wrap과 같은
-   760px·var(--pad)를 그대로 맞춰, 나중에 폭이 바뀌어도 두 곳이 갈리지 않는다. */
-.hero .field{position:absolute;left:0;right:0;bottom:0;height:120px;z-index:1;
-  display:flex;align-items:flex-end;gap:3px;max-width:760px;margin:0 auto;padding:0 var(--pad)}
-/* flex:0 0 6px로 폭을 완전히 고정하면 상품이 적을 때는 화면 왼쪽에 초라하게
-   달라붙은 티끌처럼 보인다(폭 고정 자체는 옳다 — 개수가 많을 때 폭이 나눠져
-   그래프처럼 보이는 걸 막으려던 것). min/max로 숨 쉴 틈을 준다. */
-.hero .field > i{flex:1 1 6px;min-width:3px;max-width:14px;border-radius:3px 3px 0 0;
-  background:linear-gradient(180deg,var(--key-soft) 0%,rgba(0,113,227,.12) 100%);opacity:.9}
-/* 흰 종이 위에서는 막대를 덮어 가리는 것이 아니라 아래로 스며들게 한다.
-   위쪽은 종이색으로 시작해 아래로 갈수록 투명해져, 막대가 종이에서 자라난 것처럼 보인다. */
-.hero .veil{position:absolute;inset:0;z-index:1;
-  background:linear-gradient(180deg,var(--card) 30%,rgba(var(--hero-bg-rgb),.72) 66%,rgba(var(--hero-bg-rgb),0) 100%)}
-/* 숫자와 히어로 아래 끝 사이는 예전과 같은 104px로 남는다(74 + 히어로 자체의 30).
-   막대 필드(height:120px)가 절대 위치로 깔려 있어 이 자리를 비워 두지 않으면
-   숫자와 막대가 겹친다. */
-.hero .pad{height:74px}
-@media (max-width:520px){ .hero .line > b{font-size:25px} .hero .stat .n{font-size:42px} }
-/* 좌우 여백은 감싸는 .wrap(layout.ts, 760px)이 준다. 여기서 또 주면 두 배로
-   밀린다 — 측정값은 .wrap 한 곳에만 둔다. */
-.empty{padding:40px 0 60px;color:var(--muted);font-size:13.5px;text-align:center}
-.column > a{display:block;margin-bottom:var(--gap)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
-.grid > .big{grid-column:1 / -1}
-.card{background:var(--card);border-radius:var(--radius);overflow:hidden;display:block}
-/* 자리표시자 그라디언트는 토큰(--shot-1/2)에서 가져온다. 값을 여기 직접
-   박으면 다크 모드에서 --card(#1A1A18)·--paper(#111110) 위에 라이트 모드
-   전용 회색 슬래브가 그대로 얹혀 카드 위쪽 1/3이 튀어 보인다. */
-.card .shot{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;
-  background:linear-gradient(160deg,var(--shot-1),var(--shot-2))}
-/* 이미지가 없을 때: 자리표시자를 16/9 그대로 두면 카드마다 큰 빈 블록이 남는다.
-   완전히 없애면 이미지 있는 카드와 없는 카드가 섞였을 때 높이가 들쭉날쭉해
-   그리드가 의도한 배치가 아니라 흐트러진 것처럼 보인다. 그래서 낮은 비율로 줄인다. */
-.card .shot.none{aspect-ratio:21/9}
-.card .bd{padding:12px 13px 15px}
-/* 카드는 종이 위에 얹힌 흰 판이다. 경계선과 아주 옅은 그림자로 그 층을 만든다. */
-.card{border:1px solid var(--line);box-shadow:0 1px 2px rgba(0,0,0,.03)}
-.card:active{transform:scale(.99)}
-.card .cat{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--muted)}
-.card .t{display:block;margin-top:5px;font-size:14px;font-weight:700;
-  letter-spacing:var(--track-title);line-height:1.45}
-.card .d{display:block;margin-top:5px;color:var(--muted);font-size:12px;line-height:1.65}
-.big .t{font-size:19px;letter-spacing:var(--track-display)}
-.big .shot{aspect-ratio:16/10}
-.big .shot.none{aspect-ratio:21/9}
-@media (max-width:430px){ .grid{grid-template-columns:1fr} }
-.cat-head{padding:30px 0 18px}
-.cat-head h1{font-size:24px}
-.cat-head p{margin:7px 0 0;color:var(--muted);font-size:12.5px}</style>
+/*
+ * 첫 화면은 값이다.
+ *
+ * 예전 히어로는 화면 하나를 통째로 쓰면서 그 안에 장식만 담았다 — 큰 글자 세 줄,
+ * 돌아가는 단어, 데이터와 아무 관계 없는 막대 필드. 글 목록은 스크롤을 내려야
+ * 나왔다. 이 사이트가 가진 것은 사진이 아니라 값이므로, 카드의 그림 자리에
+ * 표시가를 그려 넣고 히어로는 문장 한 덩어리로 줄였다.
+ */
+.lede{background:var(--card);border-bottom:1px solid var(--line);padding:52px 0 38px}
+.lede h1{margin:0;font-weight:700;line-height:1.16;
+  font-size:clamp(31px,5.6vw,68px);letter-spacing:-.045em}
+.lede .tagline{margin:17px 0 0;max-width:33em;color:var(--muted);
+  font-size:14.5px;line-height:1.75}
+/* 무슨 물건을 다루는 곳인지는 제목이 아니라 여기서 답한다. 값은 글의
+   상품 이름에서 뽑으므로 손으로 적은 목록이 아니다(subjectOf). */
+.subjects{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:22px 0 0}
+.subjects .lab{margin-right:2px;font-size:11.5px;font-weight:700;color:var(--muted)}
+.subjects .s{padding:6px 12px;border:1px solid var(--line);border-radius:99px;
+  background:var(--wash);color:var(--ink-body);font-size:12px;font-weight:600}
+
+.home{padding:32px 0 0}
+.feature{margin:0 0 34px}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:38px;align-items:start}
+/*
+ * 글이 한두 편인 날에는 옆 기둥이 목록보다 길다. 그대로 두면 왼쪽에 화면
+ * 절반만 한 빈 칸이 남아 무언가 빠진 화면처럼 보인다 — 목록이 짧으면 기둥을
+ * 아래로 눕혀 가로로 편다.
+ */
+.cols.thin{grid-template-columns:1fr;gap:30px}
+.cols.thin .rail{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:16px;align-items:start}
+.cols.thin .rail h2{grid-column:1 / -1;margin:0}
+.cols.thin .rail .note{margin-top:0}
+/* 기둥이 누우면 분류도 두 줄로 접는다. 여섯 칸이 세로로 서면 옆의 알림
+   상자보다 두 배 길어져 다시 빈 칸이 생긴다. */
+.cols.thin .rail .box{display:grid;grid-template-columns:1fr 1fr;column-gap:28px;padding:4px 20px 6px}
+.cols.thin .rail .c:nth-child(-n+2){border-top:0}
+.stream h2,.rail h2{margin:0 0 13px;font-size:12.5px;font-weight:700;color:var(--muted)}
+.stream .card{margin:0 0 var(--gap)}
+.empty{padding:34px 0 48px;color:var(--muted);font-size:13.5px;text-align:center}
+
+/* 카드는 값 판과 글 덩어리, 두 칸이다. 큰 카드는 값 판이 넓어져 막대가 들어간다. */
+.card{display:grid;grid-template-columns:230px minmax(0,1fr);
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.card.big{grid-template-columns:minmax(0,520px) minmax(0,1fr)}
+.card:active{transform:scale(.995)}
+.card .bd{display:flex;flex-direction:column;justify-content:center;padding:20px 24px}
+.card.big .bd{padding:30px 34px}
+.card .cat{font-size:11px;font-weight:600;color:var(--muted)}
+.card.big .cat{color:var(--key)}
+/* 줄이 길면 눈이 다음 줄 첫 글자를 못 찾는다. 카드가 넓어져도 글줄은
+   읽는 폭에서 멈춘다. */
+.card .t{display:block;margin-top:7px;max-width:26em;font-size:17.5px;font-weight:700;
+  letter-spacing:var(--track-title);line-height:1.42}
+.card.big .t{font-size:clamp(21px,2.2vw,30px);letter-spacing:var(--track-display);line-height:1.34}
+.card .d{display:block;margin-top:7px;max-width:40em;color:var(--muted);
+  font-size:12.5px;line-height:1.7}
+.card.big .d{margin-top:11px;font-size:13.5px;line-height:1.78}
+
+/* 값 판. 배경을 종이보다 한 단 낮춰 카드 안에서 데이터 영역이 구분되게 한다. */
+.panel{display:flex;flex-direction:column;justify-content:center;
+  padding:22px 24px;background:var(--wash);border-right:1px solid var(--line)}
+.card.big .panel{padding:28px 32px}
+.panel .k{font-size:11px;font-weight:700;color:var(--muted);line-height:1.5}
+.panel .rows{margin:18px 0 0}
+.panel .r{display:grid;grid-template-columns:minmax(0,1fr) auto;
+  align-items:baseline;column-gap:10px;margin:0 0 15px}
+.panel .r:last-child{margin-bottom:0}
+.panel .nm{font-size:12.5px;font-weight:600;color:var(--ink);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.panel .pv{font-size:15.5px;font-weight:700;letter-spacing:var(--track-title)}
+/* 가장 싼 것만 파랑으로 둔다. 나머지를 회색으로 남겨야 파랑이 뜻을 갖는다. */
+.panel .r.low .pv{color:var(--key)}
+.panel .bar{grid-column:1 / -1;display:block;height:6px;margin-top:7px;
+  border-radius:99px;background:#E6E6EB;overflow:hidden}
+/* 회색 막대끼리도 길이가 비교돼야 한다. 바탕과 너무 붙으면 95%와 100%가
+   같은 빈칸으로 보인다. */
+.panel .bar > i{background:#A6A6AF}
+.panel .r.low .bar > i{background:var(--key)}
+.panel .rd{margin:16px 0 0;font-size:11.5px;color:var(--muted);line-height:1.7}
+/* 작은 카드는 막대 대신 범위 한 줄만 말한다. */
+.panel .v{margin:5px 0 0;font-size:24px;font-weight:700;color:var(--key);
+  letter-spacing:var(--track-display);line-height:1.2}
+.panel .u{margin:4px 0 0;font-size:11.5px;color:var(--muted)}
+
+.rail .box{background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);padding:6px 20px}
+.rail .c{display:flex;align-items:center;justify-content:space-between;
+  padding:11px 0;border-top:1px solid var(--line);font-size:13.5px}
+.rail .c:first-child{border-top:0}
+.rail .c .n{font-weight:600}
+.rail .c.off .n{font-weight:400;color:var(--muted)}
+.rail .c .q{font-size:12.5px;color:var(--muted)}
+.rail .note{margin-top:14px;padding:19px 20px;border-radius:var(--radius);background:var(--wash)}
+.rail .note b{display:block;font-size:13px}
+.rail .note p{margin:8px 0 0;font-size:12px;color:var(--muted);line-height:1.8}
+
+@media (max-width:900px){
+  .cols{grid-template-columns:1fr;gap:26px}
+}
+@media (max-width:640px){
+  /* 누운 기둥도 폭이 없으면 다시 한 줄로 선다. 분류 두 칸을 420px에 밀어
+     넣으면 이름이 잘린다. */
+  .cols.thin .rail{grid-template-columns:1fr}
+  .cols.thin .rail .box{grid-template-columns:1fr;padding:6px 20px}
+  .cols.thin .rail .c:nth-child(2){border-top:1px solid var(--line)}
+  .card,.card.big{grid-template-columns:1fr}
+  .panel,.card.big .panel{border-right:0;border-bottom:1px solid var(--line);padding:18px 20px}
+  .card .bd,.card.big .bd{padding:18px 20px 22px}
+  .lede{padding:38px 0 30px}
+}
+.cat-head{padding:34px 0 20px}
+.cat-head h1{margin:0;font-size:28px;letter-spacing:var(--track-display)}
+.cat-head p{margin:8px 0 0;color:var(--muted);font-size:12.5px}
+.cat-list .card{margin:0 0 var(--gap)}</style>
 <body>
-<header class="site"><div class="wrap">
+<header class="site"><div class="wrap wide">
 <div class="row"><a class="logo" href="/">값부터 봅니다</a></div>
 <nav><a href="/c/cleaning/" aria-current="page">청소·세탁</a><a href="/c/storage/">수납·정리</a></nav>
 </div></header>
-<div class="wrap"><div class="cat-head"><h1>청소·세탁</h1><p>1편</p></div></div>
-<div class="wrap"><div class="column"><a class="card card-link reveal big" href="/posts/laundry-basket-unit-price/">
-<span class="shot none" aria-hidden="true"></span>
+<div class="wrap wide"><div class="cat-head"><h1>청소·세탁</h1><p>1편</p></div></div>
+<div class="wrap wide"><div class="cat-list"><a class="card card-link reveal big" href="/posts/laundry-basket-unit-price/">
+<span class="panel">
+<span class="k">빨래바구니 · 9월 8일 기준 표시가</span>
+<span class="rows"><span class="r low">
+<span class="nm">코멧 2개입</span>
+<span class="pv">8,990원</span>
+<span class="bar"><i style="width:67%;animation-delay:0ms"></i></span>
+</span>
+<span class="r">
+<span class="nm">아임홈리빙</span>
+<span class="pv">10,600원</span>
+<span class="bar"><i style="width:79%;animation-delay:110ms"></i></span>
+</span>
+<span class="r">
+<span class="nm">손잡이가</span>
+<span class="pv">13,410원</span>
+<span class="bar"><i style="width:100%;animation-delay:220ms"></i></span>
+</span></span>
+<span class="rd">파는 단위끼리 견준 값입니다. 개당 값은 글에서 봅니다.</span>
+</span>
 <span class="bd">
-<span class="cat">청소·세탁</span>
+<span class="cat">청소·세탁 · 빨래바구니</span>
 <span class="t">빨래바구니 2개 세트, 개당 2,210원 더 낼까?</span>
 <span class="d">빨래바구니 2개 세트 세 종을 개당 값으로 나누니 4,495원부터 6,705원까지였어요. 두 개가 필요한 집에 고른 한 제품과, 돈을 더 내기 전에 살펴볼 크기·손잡이 조건을 짚었습니다.</span>
 </span>
 </a></div></div>
-<footer class="site"><div class="wrap">
+<footer class="site"><div class="wrap wide">
 값부터 봅니다 · 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음<br>
 공개된 판매 정보로 값과 구성을 정리했습니다.
 </div></footer>
 <script>(function(){
-  // .num은 히어로 숫자(data-count)를 들고 있다. 목록에 없으면 count()가 절대
-  // 호출되지 않는 죽은 코드가 된다. .reveal과 달리 .num은 opacity:0으로 숨지
-  // 않으므로 관찰만 하고 트리거만 붙여도 스크립트가 막힌 방문자에게는 여전히
-  // 숫자가 보인다.
-  var targets = document.querySelectorAll('.reveal,.line,.fade-in,.bar,.field,.num');
+  var targets = document.querySelectorAll('.reveal,.line,.fade-in,.bar');
   var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   // 관찰자가 없거나 움직임을 원치 않으면 즉시 최종 상태로 둔다.
   if (still || !('IntersectionObserver' in window)) {
@@ -301,18 +368,7 @@ html.js .field > i{transform:scaleY(0)}
       if (!entry.isIntersecting) return;
       entry.target.classList.add('seen');
       io.unobserve(entry.target);
-      var n = entry.target.getAttribute('data-count');
-      if (n) count(entry.target, parseInt(n, 10));
     });
   }, { rootMargin: '0px 0px -8% 0px', threshold: .15 });
   for (var j = 0; j < targets.length; j++) io.observe(targets[j]);
-
-  function count(el, to){
-    var t0 = performance.now(), dur = 1400;
-    (function step(t){
-      var p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 4);
-      el.textContent = Math.round(to * e).toLocaleString('ko-KR');
-      if (p < 1) requestAnimationFrame(step);
-    })(t0);
-  }
 })();</script>
