@@ -129,15 +129,50 @@ header.site nav a{flex:none;font-size:11.5px;font-weight:600;padding:5px 11px;
   background:var(--card);transition:background .15s ease-out,color .15s ease-out,transform .1s ease-out}
 header.site nav a:hover{color:var(--ink);border-color:var(--muted)}
 header.site nav a[aria-current]{background:var(--ink);border-color:var(--ink);color:var(--card)}
+
+/*
+ * 책갈피. 넓은 화면에서 본문 열 왼쪽 여백에 세로 탭으로 붙어 스크롤을 따라온다.
+ *
+ * 분류를 머리말 오른쪽 끝에 두었더니 1554px에서 로고로부터 1,300px 떨어진
+ * 구석에 앉아, 사람들이 로그인·검색을 기대하는 자리에서 내용 내비게이션인 척
+ * 하게 됐다. 여백이 남는 화면에서는 여백을 쓰는 편이 낫다.
+ *
+ * 왼쪽 위치는 본문 열 폭(--col)에서 계산한다. 글 페이지는 760px, 목록은
+ * 1100px라 값이 다른데, 두 곳에 숫자를 따로 적으면 한쪽만 고쳐져 탭이 본문
+ * 위로 올라타거나 화면 밖으로 밀린다. max()는 계산 결과가 음수가 되는 아주
+ * 좁은 경우에도 탭을 화면 안에 붙잡아 둔다.
+ */
+.marks{display:none}
+@media (min-width:1280px){
+  .marks{display:flex;flex-direction:column;gap:6px;z-index:8;
+    position:fixed;top:50%;transform:translateY(-50%);
+    left:max(14px,calc((100vw - var(--col)) / 2 - 72px))}
+  .marks a{writing-mode:vertical-rl;text-orientation:upright;
+    padding:15px 9px;border:1px solid var(--line);border-radius:10px;
+    background:var(--card);color:var(--muted);
+    font-size:12.5px;font-weight:600;letter-spacing:.04em;
+    box-shadow:0 1px 2px rgba(0,0,0,.04);
+    transition:color .15s ease-out,background .15s ease-out,transform .18s ease-out}
+  .marks a:hover{color:var(--ink);transform:translateX(-3px)}
+  .marks a[aria-current]{background:var(--ink);border-color:var(--ink);color:var(--card)}
+  /* 책갈피가 나오면 머리말의 같은 목록은 물러난다. 같은 것이 두 곳에 있으면
+     어느 쪽도 눈에 들어오지 않는다. */
+  header.site nav{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .marks a:hover{transform:none}
+}
 /*
  * 좁은 화면에서는 이름 한 줄, 분류 한 줄이다. 분류가 가로로 넘치면 그 줄만
  * 밀어서 본다. 넓어지면 두 줄을 한 줄로 합친다 — 자리가 있는데도 머리말이
  * 95px를 차지하면 첫 화면에서 글이 그만큼 밀린다.
+ *
+ * 분류는 이름 바로 옆에 붙인다. 오른쪽 끝으로 밀면 내용 내비게이션이 아니라
+ * 계정 메뉴가 앉는 자리가 되어, 글자를 키워도 눈에 들어오지 않는다.
  */
 @media (min-width:721px){
   header.site{padding:0}
-  header.site > .wrap{display:flex;align-items:center;justify-content:space-between;
-    gap:28px;min-height:58px}
+  header.site > .wrap{display:flex;align-items:center;gap:26px;min-height:58px}
   header.site .row{flex:none}
   header.site nav{padding:0;overflow:visible}
 }
@@ -325,11 +360,12 @@ html.js .bar > i{transform:scaleX(0)}
 .cat-head h1{margin:0;font-size:28px;letter-spacing:var(--track-display)}
 .cat-head p{margin:8px 0 0;color:var(--muted);font-size:12.5px}
 .cat-list .card{margin:0 0 var(--gap)}</style>
-<body>
+<body style="--col:1100px">
 <header class="site"><div class="wrap wide">
 <div class="row"><a class="logo" href="/">가성비부터 가심비까지</a></div>
 <nav><a href="/c/cleaning/" aria-current="page">청소·세탁</a><a href="/c/storage/">수납·정리</a></nav>
 </div></header>
+<nav class="marks" aria-label="분류"><a href="/c/cleaning/" aria-current="page">청소·세탁</a><a href="/c/storage/">수납·정리</a></nav>
 <div class="wrap wide"><div class="cat-head"><h1>청소·세탁</h1><p>1편</p></div></div>
 <div class="wrap wide"><div class="cat-list"><a class="card card-link reveal big" href="/posts/laundry-basket-unit-price/">
 <span class="panel">
