@@ -4,13 +4,13 @@
 <script>document.documentElement.classList.add('js')</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>값부터 봅니다</title>
-<meta name="description" content="판매 페이지에 적힌 값과 제조사 표기 스펙을 한 표에 모읍니다. 직접 써 보진 않았고, 확인한 것만 적습니다.">
+<meta name="description" content="판매 페이지에 적힌 가격과 제조사 표기 스펙을 한 표에 모읍니다. 직접 써 보진 않았고, 확인한 것만 적습니다.">
 <link rel="canonical" href="https://gapbom.com/">
 <meta name="robots" content="noindex, nofollow">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="값부터 봅니다">
-<meta property="og:description" content="판매 페이지에 적힌 값과 제조사 표기 스펙을 한 표에 모읍니다. 직접 써 보진 않았고, 확인한 것만 적습니다.">
+<meta property="og:description" content="판매 페이지에 적힌 가격과 제조사 표기 스펙을 한 표에 모읍니다. 직접 써 보진 않았고, 확인한 것만 적습니다.">
 <meta property="og:url" content="https://gapbom.com/">
 <meta property="og:site_name" content="값부터 봅니다">
 <meta property="og:locale" content="ko_KR">
@@ -300,6 +300,12 @@ html.js .bar > i{transform:scaleX(0)}
 .rail .note{margin-top:14px;padding:19px 20px;border-radius:var(--radius);background:var(--wash)}
 .rail .note b{display:block;font-size:13px}
 .rail .note p{margin:8px 0 0;font-size:12px;color:var(--muted);line-height:1.8}
+.rail .ways{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.rail .ways a{padding:8px 14px;border-radius:99px;font-size:12px;font-weight:600;
+  border:1px solid var(--ink);background:var(--ink);color:var(--card);
+  transition:opacity .15s ease-out}
+.rail .ways a + a{border-color:var(--line);background:var(--card);color:var(--ink)}
+.rail .ways a:hover{opacity:.82}
 
 @media (max-width:900px){
   .cols{grid-template-columns:1fr;gap:26px}
@@ -322,7 +328,7 @@ html.js .bar > i{transform:scaleX(0)}
 </div></header>
 <section class="lede"><div class="wrap wide">
 <h1><span class="line"><b>집에서 쓰는 물건,</b></span><span class="line"><b>값부터 봅니다.</b></span></h1>
-<p class="tagline fade-in">판매 페이지에 적힌 값과 제조사 표기 스펙을 한 표에 모읍니다. 직접 써 보진 않았고, 확인한 것만 적습니다.</p>
+<p class="tagline fade-in">판매 페이지에 적힌 가격과 제조사 표기 스펙을 한 표에 모읍니다. 직접 써 보진 않았고, 확인한 것만 적습니다.</p>
 <div class="subjects fade-in"><span class="lab">지금까지 본 것</span><span class="s">옷걸이</span><span class="s">빨래바구니</span></div>
 </div></section>
 <div class="wrap wide home">
@@ -344,7 +350,7 @@ html.js .bar > i{transform:scaleX(0)}
 <span class="pv">37,900원</span>
 <span class="bar"><i style="width:100%;animation-delay:220ms"></i></span>
 </span></span>
-<span class="rd">파는 단위끼리 견준 값입니다. 개당 값은 글에서 봅니다.</span>
+<span class="rd">파는 단위끼리 견준 가격입니다. 개당 가격은 글에서 봅니다.</span>
 </span>
 <span class="bd">
 <span class="cat">수납·정리 · 옷걸이</span>
@@ -374,15 +380,16 @@ html.js .bar > i{transform:scaleX(0)}
 <div class="c off"><span class="n">디지털·책상</span><span class="q">—</span></div>
 <div class="c off"><span class="n">침실·욕실</span><span class="q">—</span></div></div>
 <div class="note">
-<b>여기 적는 값의 기준</b>
-<p>직접 써 보지 않았습니다. 판매 페이지에 적힌 값과 제조사 표기 스펙을 옮겨 적고, 견주는 계산만 저희가 합니다. 성능은 다른 사람의 후기를 출처와 함께 빌려 씁니다.</p>
+<b>가격은 계속 바뀝니다</b>
+<p>같은 물건을 다시 확인하면 날짜와 함께 새로 적습니다. 새 글이 나오면 스레드에도 짧게 올립니다.</p>
+<div class="ways"><a href="https://www.threads.com/@class_cart" rel="noopener" target="_blank">스레드에서 보기</a><a href="/rss.xml">RSS로 받기</a></div>
 </div>
 </aside>
 </div>
 </div>
 <footer class="site"><div class="wrap wide">
 값부터 봅니다 · 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음<br>
-공개된 판매 정보로 값과 구성을 정리했습니다.
+공개된 판매 정보로 가격과 구성을 정리했습니다.
 </div></footer>
 <script>(function(){
   var targets = document.querySelectorAll('.reveal,.line,.fade-in,.bar');
